@@ -2,7 +2,7 @@
     "name": "bristol-su/unioncloud-portal",
     "description": "An integration with unioncloud for use with the portal",
     "type": "library",
-    "license": "GPL-v3",
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Toby Twigger",
