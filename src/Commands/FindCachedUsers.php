@@ -44,7 +44,7 @@ class FindCachedUsers extends Command
         $completed = $this->ids()->count();
 
         $this->line(
-            sprintf('We\'ve cached %d%% of the users.', ($done / $completed) * 100)
+            sprintf('We\'ve cached %d%% of the users (%d/%d).', ($done / $completed) * 100, $done, $completed)
         );
     }
 
