@@ -3,9 +3,12 @@
 namespace BristolSU\UnionCloud\Commands;
 
 use BristolSU\ControlDB\Contracts\Models\User;
+use BristolSU\ControlDB\Contracts\Repositories\DataUser as DataUserRepository;
 use BristolSU\ControlDB\Contracts\Repositories\User as UserRepository;
-use BristolSU\UnionCloud\Implementations\DataUserRepository;
+use BristolSU\UnionCloud\UnionCloud\UnionCloud;
+use BristolSU\UnionCloud\UnionCloud\UnionCloudCacher;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
@@ -52,7 +55,7 @@ class CacheUnionCloudDataUsers extends Command
     {
         if(Cache::get('uc-ids-to-cache', collect())->count() === 0) {
             Cache::forever('uc-ids-to-cache', app(UserRepository::class)->all()->map(function(User $user) {
-                return $user->id();
+                return $user->dataProviderId();
             }));
         }
 
