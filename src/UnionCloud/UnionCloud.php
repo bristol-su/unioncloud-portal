@@ -69,7 +69,7 @@ class UnionCloud implements UnionCloudContract
     public function searchForUser(array $attributes)
     {
         try {
-            $this->unionCloud->users()->setMode('standard')->search($attributes)->get()->first();
+            return $this->unionCloud->users()->setMode('standard')->search($attributes)->get()->first();
         } catch (\Exception $e) {
             $this->handleException($e);
         }
