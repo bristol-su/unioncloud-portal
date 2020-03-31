@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Twigger\UnionCloud\API\Exception\Request\IncorrectRequestParameterException;
+use Twigger\UnionCloud\API\Exception\Resource\ResourceNotFoundException;
 use Twigger\UnionCloud\API\Resource\User;
 
 class UnionCloud implements UnionCloudContract
@@ -49,6 +50,8 @@ class UnionCloud implements UnionCloudContract
     
     protected function handleException(\Exception $e) {
         if($e instanceof IncorrectRequestParameterException) {
+            throw new ModelNotFoundException();
+        } if($e instanceof ResourceNotFoundException) {
             throw new ModelNotFoundException();
         }
         if($e->getPrevious() !== null) {
