@@ -53,6 +53,16 @@ class CacheUnionCloudDataUsers extends Command
 
     private function getId()
     {
+        $recentlyTested = Cache::get('uc-ids-recently-tested', collect());
+        $toCache = $this->ids()->filter(function(int $id) use ($recentlyTested) {
+            return Cache::missing('unioncloud-data-user-get-by-id:' . $id) && !$recentlyTested->contains($id);
+        });
+        
+        if($toCache->count() > 0) {
+            Cache::put('uc-ids-recently-tested', $toCache->concat($recentlyTested), 1800);
+            Cache::forever('uc-ids-to-cache', $toCache);
+        }
+        
         
         if(Cache::get('uc-ids-to-cache', collect())->count() === 0) {
             Cache::forever('uc-ids-to-cache', app(UserRepository::class)->all()->map(function(User $user) {
@@ -65,5 +75,15 @@ class CacheUnionCloudDataUsers extends Command
         $id = $ids->shift();
         Cache::forever('uc-ids-to-cache', $ids);
         return $id;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function ids()
+    {
+        return app(UserRepository::class)->all()->map(function (User $user) {
+            return $user->dataProviderId();
+        });
     }
 }
