@@ -59,6 +59,7 @@ class CacheUnionCloudDataUsers extends Command
         });
         
         if($toCache->count() > 0) {
+            $this->line(sprintf('%d users pushed to the front of the queue', $toCache->count()));
             Cache::put('uc-ids-recently-tested', $toCache->concat($recentlyTested), 1800);
             Cache::forever('uc-ids-to-cache', $toCache);
         }
