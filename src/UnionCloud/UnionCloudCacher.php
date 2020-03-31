@@ -18,7 +18,7 @@ class UnionCloudCacher implements UnionCloudContract
      */
     private $cache;
     
-    static $cacheFor = 100000;
+    static $cacheFor = 6000000;
 
     public function __construct(UnionCloudContract $unionCloudContract, Repository $cache)
     {

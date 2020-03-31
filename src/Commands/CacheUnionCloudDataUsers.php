@@ -53,6 +53,7 @@ class CacheUnionCloudDataUsers extends Command
 
     private function getId()
     {
+        
         if(Cache::get('uc-ids-to-cache', collect())->count() === 0) {
             Cache::forever('uc-ids-to-cache', app(UserRepository::class)->all()->map(function(User $user) {
                 return $user->dataProviderId();
