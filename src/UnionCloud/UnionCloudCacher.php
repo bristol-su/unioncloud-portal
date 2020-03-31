@@ -31,7 +31,7 @@ class UnionCloudCacher implements UnionCloudContract
      */
     public function getUserGroupMemberships(int $userGroupId): Collection
     {
-        $this->cache->remember('unioncloud-user-group-get-by-id:' . $userGroupId, static::$cacheFor, function() use ($userGroupId) {
+        return $this->cache->remember('unioncloud-user-group-get-by-id:' . $userGroupId, static::$cacheFor, function() use ($userGroupId) {
             return $this->unionCloudContract->getUserGroupMemberships($userGroupId);
         });
     }
