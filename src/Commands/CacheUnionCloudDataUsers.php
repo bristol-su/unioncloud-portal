@@ -45,7 +45,7 @@ class CacheUnionCloudDataUsers extends Command
      */
     public function handle()
     {
-        for($i = 0; $i <= static::$usersToCache; $i++) {
+        for($i = 0; $i <= config('unioncloud-portal.users_per_minute', static::$usersToCache); $i++) {
             app(DataUserRepository::class)->getById($id = $this->getId());
             $this->line(sprintf('Cached user #%s', $id));
         }
