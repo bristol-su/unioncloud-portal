@@ -28,7 +28,7 @@ class CacheUnionCloudDataUsers extends Command
      */
     protected $description = 'Cache users from UnionCloud';
 
-    protected static $usersToCache = 35;
+    protected static $usersToCache = 30;
 
     /**
      * Create a new command instance.
