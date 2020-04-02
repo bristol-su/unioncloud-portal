@@ -23,7 +23,6 @@ class CacheUserGroupMemberships implements ShouldQueue
     public function __construct(int $userGroupId)
     {
         $this->userGroupId = $userGroupId;
-        $this->queue = 'unioncloud-user-cache';
     }
 
     public function handle()
