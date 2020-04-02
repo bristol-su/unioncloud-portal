@@ -5,6 +5,8 @@ namespace BristolSU\UnionCloud;
 use BristolSU\ControlDB\Contracts\Repositories\DataUser as DataUserRepositoryContract;
 use BristolSU\ControlDB\Contracts\Repositories\Pivots\UserGroup as UserGroupRepositoryContract;
 use BristolSU\UnionCloud\Commands\CacheUnionCloudDataUsers;
+use BristolSU\UnionCloud\Commands\CacheUnionCloudUserGroupMemberships;
+use BristolSU\UnionCloud\Commands\CacheUnionCloudUsersUserGroupMemberships;
 use BristolSU\UnionCloud\Commands\FindCachedUsers;
 use BristolSU\UnionCloud\Implementations\DataUserRepository as UnionCloudDataUserRepository;
 use BristolSU\UnionCloud\Implementations\UserGroup as UnionCloudUserGroupRepository;
@@ -57,6 +59,8 @@ class UnionCloudIntegrationServiceProvider extends ServiceProvider
     {
         $this->commands([
             CacheUnionCloudDataUsers::class,
+            CacheUnionCloudUserGroupMemberships::class,
+            CacheUnionCloudUsersUserGroupMemberships::class,
             FindCachedUsers::class
         ]);
     }
