@@ -7,7 +7,9 @@ use BristolSU\ControlDB\Contracts\Repositories\Pivots\UserGroup as UserGroupRepo
 use BristolSU\UnionCloud\Commands\CacheUnionCloudDataUsers;
 use BristolSU\UnionCloud\Commands\CacheUnionCloudUserGroupMemberships;
 use BristolSU\UnionCloud\Commands\CacheUnionCloudUsersUserGroupMemberships;
+use BristolSU\UnionCloud\Commands\FindCachedUserGroupMemberships;
 use BristolSU\UnionCloud\Commands\FindCachedUsers;
+use BristolSU\UnionCloud\Commands\FindCachedUserUserGroupMemberships;
 use BristolSU\UnionCloud\Implementations\DataUserRepository as UnionCloudDataUserRepository;
 use BristolSU\UnionCloud\Implementations\UserGroup as UnionCloudUserGroupRepository;
 use BristolSU\UnionCloud\UnionCloud\UnionCloud;
@@ -61,7 +63,9 @@ class UnionCloudIntegrationServiceProvider extends ServiceProvider
             CacheUnionCloudDataUsers::class,
             CacheUnionCloudUserGroupMemberships::class,
             CacheUnionCloudUsersUserGroupMemberships::class,
-            FindCachedUsers::class
+            FindCachedUsers::class,
+            FindCachedUserGroupMemberships::class,
+            FindCachedUserUserGroupMemberships::class
         ]);
     }
 
