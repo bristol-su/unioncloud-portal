@@ -2,12 +2,9 @@
 
 namespace BristolSU\UnionCloud\Commands;
 
-use BristolSU\ControlDB\Contracts\Models\User;
-use BristolSU\ControlDB\Contracts\Repositories\User as UserRepository;
-use BristolSU\UnionCloud\Implementations\DataUserRepository;
+use BristolSU\UnionCloud\Cache\IdStore;
 use BristolSU\UnionCloud\Models\GroupGroupMembership;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
 class FindCachedUserGroupMemberships extends Command
@@ -17,23 +14,28 @@ class FindCachedUserGroupMemberships extends Command
      *
      * @var string
      */
-    protected $signature = 'unioncloud:cachedusergroups';
+    protected $signature = 'unioncloud:members:cached';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'See all cached user groups from UnionCloud';
+    protected $description = 'See all cached group memberships from UnionCloud';
+    /**
+     * @var IdStore
+     */
+    private $idStore;
 
     /**
      * Create a new command instance.
      *
-     * @return void
+     * @param IdStore $idStore
      */
-    public function __construct()
+    public function __construct(IdStore $idStore)
     {
         parent::__construct();
+        $this->idStore = $idStore;
     }
 
     /**
@@ -41,23 +43,29 @@ class FindCachedUserGroupMemberships extends Command
      */
     public function handle()
     {
-        $done = $this->cachedIds()->count();
-        $completed = $this->ids()->count();
+        $cached = $this->cached();
+        $total = $this->total();
+        $remaining = $this->inQueue();
 
         $this->line(
-            sprintf('We\'ve cached %d%% of the usergroups (%d/%d).', ($done / $completed) * 100, $done, $completed)
+            sprintf('We\'ve cached %d%% of the usergroup memberships (%d/%d) and have %d left to cache.', ($cached / $total) * 100, $cached, $total, $remaining)
         );
     }
 
-    public function cachedIds()
+    public function inQueue()
     {
-        return $this->ids()->filter(function (int $id) {
-            return Cache::has('unioncloud-user-group-get-by-id:' . $id);
-        });
+        return $this->idStore->count();
     }
 
-    public function ids()
+    public function cached()
     {
-        return GroupGroupMembership::all()->pluck('usergroup_id');
+        return GroupGroupMembership::all()->pluck('usergroup_id')->filter(function (int $id) {
+            return Cache::has('unioncloud-user-group-get-by-id:' . $id);
+        })->count();
+    }
+
+    public function total()
+    {
+        return GroupGroupMembership::all()->pluck('usergroup_id')->count();
     }
 }

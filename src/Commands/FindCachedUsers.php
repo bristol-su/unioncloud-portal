@@ -4,9 +4,8 @@ namespace BristolSU\UnionCloud\Commands;
 
 use BristolSU\ControlDB\Contracts\Models\User;
 use BristolSU\ControlDB\Contracts\Repositories\User as UserRepository;
-use BristolSU\UnionCloud\Implementations\DataUserRepository;
+use BristolSU\UnionCloud\Cache\IdStore;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
 class FindCachedUsers extends Command
@@ -16,7 +15,7 @@ class FindCachedUsers extends Command
      *
      * @var string
      */
-    protected $signature = 'unioncloud:cachedusers';
+    protected $signature = 'unioncloud:users:cached';
 
     /**
      * The console command description.
@@ -24,15 +23,20 @@ class FindCachedUsers extends Command
      * @var string
      */
     protected $description = 'See all cached users from UnionCloud';
+    /**
+     * @var IdStore
+     */
+    private $idStore;
 
     /**
      * Create a new command instance.
      *
-     * @return void
+     * @param IdStore $idStore
      */
-    public function __construct()
+    public function __construct(IdStore $idStore)
     {
         parent::__construct();
+        $this->idStore = $idStore;
     }
 
     /**
@@ -40,25 +44,33 @@ class FindCachedUsers extends Command
      */
     public function handle()
     {
-        $done = $this->cachedIds()->count();
-        $completed = $this->ids()->count();
+        $cached = $this->cached();
+        $total = $this->total();
+        $remaining = $this->inQueue();
 
         $this->line(
-            sprintf('We\'ve cached %d%% of the users (%d/%d).', ($done / $completed) * 100, $done, $completed)
+            sprintf('We\'ve cached %d%% of the users (%d/%d) and have %d left to cache.', ($cached / $total) * 100, $cached, $total, $remaining)
         );
     }
 
-    public function cachedIds()
+    public function inQueue()
     {
-        return $this->ids()->filter(function (int $id) {
-            return Cache::has('unioncloud-data-user-get-by-id:' . $id);
-        });
+        return $this->idStore->count();
     }
-
-    public function ids()
+    
+    public function cached()
     {
         return app(UserRepository::class)->all()->map(function (User $user) {
             return $user->dataProviderId();
-        });
+        })->filter(function (int $id) {
+            return Cache::has('unioncloud-data-user-get-by-id:' . $id);
+        })->count();
+    }
+
+    public function total()
+    {
+        return app(UserRepository::class)->all()->map(function (User $user) {
+            return $user->dataProviderId();
+        })->count();
     }
 }

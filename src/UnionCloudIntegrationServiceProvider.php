@@ -4,6 +4,8 @@ namespace BristolSU\UnionCloud;
 
 use BristolSU\ControlDB\Contracts\Repositories\DataUser as DataUserRepositoryContract;
 use BristolSU\ControlDB\Contracts\Repositories\Pivots\UserGroup as UserGroupRepositoryContract;
+use BristolSU\UnionCloud\Cache\IdCacheStore;
+use BristolSU\UnionCloud\Cache\IdStore;
 use BristolSU\UnionCloud\Commands\CacheUnionCloudDataUsers;
 use BristolSU\UnionCloud\Commands\CacheUnionCloudUserGroupMemberships;
 use BristolSU\UnionCloud\Commands\CacheUnionCloudUsersUserGroupMemberships;
@@ -31,6 +33,25 @@ class UnionCloudIntegrationServiceProvider extends ServiceProvider
         $this->app->extend(UnionCloudContract::class, function(UnionCloudContract $service, $app) {
             return new UnionCloudCacher($service, $app->make(Repository::class));
         });
+        
+        $this->app->when([CacheUnionCloudDataUsers::class, FindCachedUsers::class])
+            ->needs(IdStore::class)
+            ->give(function() {
+                return new IdCacheStore('uc-ids-to-cache', app(Repository::class));
+            });
+
+
+        $this->app->when([CacheUnionCloudUserGroupMemberships::class, FindCachedUserGroupMemberships::class])
+            ->needs(IdStore::class)
+            ->give(function() {
+                return new IdCacheStore('uc-ug-ids-to-cache', app(Repository::class));
+            });
+
+        $this->app->when([CacheUnionCloudUsersUserGroupMemberships::class, FindCachedUserUserGroupMemberships::class])
+            ->needs(IdStore::class)
+            ->give(function() {
+                return new IdCacheStore('uc-ug-user-ids-to-cache', app(Repository::class));
+            });
     }
     
     protected function registerConfig()
