@@ -30,8 +30,8 @@ class UnionCloud implements UnionCloudContract
     {
         try {
             return collect($this->unionCloud->userGroupMemberships()
-                ->getByUserGroup($userGroupId, Carbon::now()->subSecond(), Carbon::now()->addSecond())
-                ->get()->toArray());
+                ->paginate()->getByUserGroup($userGroupId, Carbon::now()->subSecond(), Carbon::now()->addSecond())
+                ->getAllPages()->toArray());
         } catch (Exception $e) {
             $this->handleException($e, $userGroupId);
         }
@@ -57,7 +57,7 @@ class UnionCloud implements UnionCloudContract
     public function getUsersUserGroupMemberships(int $userId): Collection
     {
         try {
-            return collect($this->unionCloud->userGroupMemberships()->getByUser($userId)->get()->toArray());
+            return collect($this->unionCloud->userGroupMemberships()->paginate()->getByUser($userId)->getAllPages()->toArray());
         } catch (Exception $e) {
             $this->handleException($e, $userId);
         }
