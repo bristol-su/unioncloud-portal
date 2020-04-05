@@ -31,7 +31,7 @@ class UnionCloudCacher implements UnionCloudContract
      */
     public function getUserGroupMemberships(int $userGroupId): Collection
     {
-        return $this->cache->remember('unioncloud-user-group-get-by-id:' . $userGroupId, static::$cacheFor, function() use ($userGroupId) {
+        return $this->cache->rememberForever('unioncloud-user-group-get-by-id:' . $userGroupId, function() use ($userGroupId) {
             return $this->unionCloudContract->getUserGroupMemberships($userGroupId);
         });
     }
@@ -41,14 +41,14 @@ class UnionCloudCacher implements UnionCloudContract
      */
     public function getUsersUserGroupMemberships(int $userId): Collection
     {
-        return $this->cache->remember('unioncloud-user-group-ugm-through-user:' . $userId, static::$cacheFor, function() use ($userId) {
+        return $this->cache->rememberForever('unioncloud-user-group-ugm-through-user:' . $userId, function() use ($userId) {
             return $this->unionCloudContract->getUsersUserGroupMemberships($userId);
         });
     }
 
     public function getUserById(int $id): User
     {
-        return $this->cache->remember('unioncloud-data-user-get-by-id:' . $id, static::$cacheFor, function() use ($id) {
+        return $this->cache->rememberForever('unioncloud-data-user-get-by-id:' . $id, function() use ($id) {
             return $this->unionCloudContract->getUserById($id);
         });
     }
