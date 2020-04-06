@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "326e26b7ca72c0bce897600fcc548193",
+    "content-hash": "59fcd14eabdc4d5946f23efb5dfbfd03",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -4292,16 +4292,16 @@
         },
         {
             "name": "twigger/unioncloud",
-            "version": "dev-master",
+            "version": "v1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bristol-su/nus-unioncloud-api-wrapper.git",
-                "reference": "3addbec855177e4db792330f6e9e5ed30d6bfe97"
+                "reference": "4a72204bf437f4500b2caed82bea431563b80c9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bristol-su/nus-unioncloud-api-wrapper/zipball/3addbec855177e4db792330f6e9e5ed30d6bfe97",
-                "reference": "3addbec855177e4db792330f6e9e5ed30d6bfe97",
+                "url": "https://api.github.com/repos/bristol-su/nus-unioncloud-api-wrapper/zipball/4a72204bf437f4500b2caed82bea431563b80c9d",
+                "reference": "4a72204bf437f4500b2caed82bea431563b80c9d",
                 "shasum": ""
             },
             "require": {
@@ -4338,7 +4338,7 @@
                 }
             ],
             "description": "An API Wrapper for the NUS UnionCloud platform",
-            "time": "2020-04-06T13:52:19+00:00"
+            "time": "2020-04-06T14:31:13+00:00"
         },
         {
             "name": "venturecraft/revisionable",
@@ -4467,9 +4467,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "twigger/unioncloud": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
