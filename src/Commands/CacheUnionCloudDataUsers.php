@@ -12,6 +12,7 @@ use GuzzleHttp\Exception\ClientException;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Facades\Cache;
+use Twigger\UnionCloud\API\Auth\awsAuthenticator;
 
 class CacheUnionCloudDataUsers extends Command
 {
@@ -53,11 +54,24 @@ class CacheUnionCloudDataUsers extends Command
         );
     }
 
+    public function temp()
+    {
+        $unionCloud = app(\Twigger\UnionCloud\API\UnionCloud::class);
+        try {
+            dd($unionCloud->users()->search(['email' => 'tt15951@bristol.ac.uk'])->get()); 
+        } catch (\Exception $e) {
+            dd($e);
+        }
+    }
+    
     /**
      * Execute the console command.
      */
     public function handle()
     {
+        
+        $this->temp();
+        
         $completed = 0;
         $failed = false;
         
