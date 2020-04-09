@@ -100,7 +100,7 @@ class CacheUnionCloudUserGroupMemberships extends Command
             return Cache::missing('unioncloud-user-group-get-by-id:' . $id);
         });
 
-        if(($ids->count() - $uncachedIds->count()) + $this->idStore->count() === $ids->count()) {
+        if($uncachedIds->count() !== 0) {
             $this->idStore->setIds($uncachedIds);
         } else {
             $this->idStore->setIds($ids);
