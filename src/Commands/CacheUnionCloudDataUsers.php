@@ -5,13 +5,14 @@ namespace BristolSU\UnionCloud\Commands;
 use BristolSU\ControlDB\Contracts\Models\User;
 use BristolSU\ControlDB\Contracts\Repositories\User as UserRepository;
 use BristolSU\UnionCloud\Cache\IdStore;
-use BristolSU\UnionCloud\Jobs\CacheUser;
 use BristolSU\UnionCloud\UnionCloud\UnionCloud;
 use BristolSU\UnionCloud\UnionCloud\UnionCloudCacher;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Twigger\UnionCloud\API\Auth\awsAuthenticator;
 
 class CacheUnionCloudDataUsers extends Command
@@ -75,6 +76,8 @@ class CacheUnionCloudDataUsers extends Command
                 if($e instanceof ClientException && ($e->getCode() === 401 || $e->getCode() === 403)) {
                     $this->idStore->push($id);
                     $failed = true;
+                } elseif($e instanceof ModelNotFoundException) {
+                    Log::info(sprintf('Unioncloud user %s not found', $id));
                 } else {
                     throw $e;
                 }
