@@ -73,7 +73,7 @@ class CacheUnionCloudUserGroupMemberships extends Command
                 $completed += 1;
             } catch (\Exception $e) {
                 $this->error('Failed caching user group #' . $id);
-                if($e instanceof ClientException && ($e->getCode() === 401 || $e->getCode() === 403)) {
+                if($e instanceof ClientException && $e->getCode() === 429) {
                     $this->idStore->push($id);
                     $failed = true;
                 } elseif($e instanceof ModelNotFoundException) {
@@ -119,7 +119,7 @@ class CacheUnionCloudUserGroupMemberships extends Command
             $callback($id);
         } catch (\Exception $e) {
             if($hasCache) {
-                Cache::put($key, $value, UnionCloudCacher::$cacheFor);
+                Cache::forever($key, $value);
             }
             throw $e;
         }
