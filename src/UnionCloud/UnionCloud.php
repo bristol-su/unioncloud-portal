@@ -33,7 +33,11 @@ class UnionCloud implements UnionCloudContract
                 ->paginate()->getByUserGroup($userGroupId, Carbon::now()->subSecond(), Carbon::now()->addSecond())
                 ->getAllPages()->toArray());
         } catch (Exception $e) {
-            $this->handleException($e, $userGroupId);
+            try {
+                $this->handleException($e, $userGroupId);
+            } catch (ModelNotFoundException $e) {
+                return collect();
+            }
         }
     }
 
@@ -59,7 +63,11 @@ class UnionCloud implements UnionCloudContract
         try {
             return collect($this->unionCloud->userGroupMemberships()->paginate()->getByUser($userId)->getAllPages()->toArray());
         } catch (Exception $e) {
-            $this->handleException($e, $userId);
+            try {
+                $this->handleException($e, $userId);
+            } catch (ModelNotFoundException $e) {
+                return collect();
+            }
         }
     }
 
@@ -68,7 +76,11 @@ class UnionCloud implements UnionCloudContract
         try {
             return $this->unionCloud->users()->setMode('standard')->getByUID($id)->get()->first();
         } catch (Exception $e) {
-            $this->handleException($e, $id);
+            try {
+                $this->handleException($e, $id);
+            } catch (ModelNotFoundException $e) {
+                return new User(['uid' => $id]);
+            }
         }
     }
 
