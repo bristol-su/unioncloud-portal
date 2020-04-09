@@ -53,25 +53,12 @@ class CacheUnionCloudDataUsers extends Command
             app(Repository::class)
         );
     }
-
-    public function temp()
-    {
-        $unionCloud = app(\Twigger\UnionCloud\API\UnionCloud::class);
-        try {
-            dd($unionCloud->users()->search(['email' => 'tt15951@bristol.ac.uk'])->get()); 
-        } catch (\Exception $e) {
-            dd($e);
-        }
-    }
-    
+ 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        
-        $this->temp();
-        
         $completed = 0;
         $failed = false;
         
