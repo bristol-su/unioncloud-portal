@@ -101,7 +101,7 @@ class CacheUnionCloudDataUsers extends Command
             return Cache::missing('unioncloud-data-user-get-by-id:' . $id);
         });
         
-        if(($ids->count() - $uncachedIds->count()) + $this->idStore->count() === $ids) {
+        if(($ids->count() - $uncachedIds->count()) + $this->idStore->count() === $ids->count()) {
             $this->idStore->setIds($uncachedIds);
         } else {
             $this->idStore->setIds($ids);
