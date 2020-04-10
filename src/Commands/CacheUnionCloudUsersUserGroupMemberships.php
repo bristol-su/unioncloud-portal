@@ -97,15 +97,7 @@ class CacheUnionCloudUsersUserGroupMemberships extends Command
         $ids = app(UserRepository::class)->all()->map(function(User $user) {
             return $user->dataProviderId();
         });
-        $uncachedIds = $ids->filter(function(int $id) {
-            return Cache::missing('unioncloud-user-group-ugm-through-user:' . $id);
-        });
-
-        if($uncachedIds->count() !== 0) {
-            $this->idStore->setIds($uncachedIds);
-        } else {
-            $this->idStore->setIds($ids);
-        }
+        $this->idStore->setIds($ids);
     }
 
     private function updateCache($id, \Closure $callback)
