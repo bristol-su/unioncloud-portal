@@ -27,6 +27,7 @@ class FindCachedUsers extends Command
      * @var IdStore
      */
     private $idStore;
+    private $userIds;
 
     /**
      * Create a new command instance.
@@ -60,17 +61,23 @@ class FindCachedUsers extends Command
     
     public function cached()
     {
-        return app(UserRepository::class)->all()->map(function (User $user) {
-            return $user->dataProviderId();
-        })->filter(function (int $id) {
+        return $this->userIds()->filter(function (int $id) {
             return Cache::has('unioncloud-data-user-get-by-id:' . $id);
         })->count();
     }
 
     public function total()
     {
-        return app(UserRepository::class)->all()->map(function (User $user) {
-            return $user->dataProviderId();
-        })->count();
+        return $this->userIds()->count();
+    }
+
+    public function userIds()
+    {
+        if(!$this->userIds) {
+            $this->userIds = app(UserRepository::class)->all()->map(function (User $user) {
+                return $user->dataProviderId();
+            });
+        }
+        return $this->userIds;
     }
 }
