@@ -59,4 +59,11 @@ class UnionCloudCacher implements UnionCloudContract
             return $this->unionCloudContract->searchForUser($attributes);
         });
     }
+
+    public function searchForUsers(array $attributes)
+    {
+        return $this->cache->remember('unioncloud-data-users-search:' . json_encode($attributes), static::$cacheFor, function() use ($attributes) {
+            return $this->unionCloudContract->searchForUsers($attributes);
+        });
+    }
 }

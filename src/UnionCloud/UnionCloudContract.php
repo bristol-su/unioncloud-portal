@@ -30,4 +30,6 @@ interface UnionCloudContract
     public function getUserById(int $id): User;
 
     public function searchForUser(array $attributes);
+
+    public function searchForUsers(array $attributes);
 }
