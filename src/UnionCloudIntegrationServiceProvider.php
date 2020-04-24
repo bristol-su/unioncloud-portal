@@ -30,9 +30,9 @@ class UnionCloudIntegrationServiceProvider extends ServiceProvider
         $this->registerCommands();
         
         $this->app->bind(UnionCloudContract::class, UnionCloud::class);
-        $this->app->extend(UnionCloudContract::class, function(UnionCloudContract $service, $app) {
-            return new UnionCloudCacher($service, $app->make(Repository::class));
-        });
+//        $this->app->extend(UnionCloudContract::class, function(UnionCloudContract $service, $app) {
+//            return new UnionCloudCacher($service, $app->make(Repository::class));
+//        });
         
         $this->app->when([CacheUnionCloudDataUsers::class, FindCachedUsers::class])
             ->needs(IdStore::class)

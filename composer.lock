@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "59fcd14eabdc4d5946f23efb5dfbfd03",
+    "content-hash": "3826e681dbfeaa2092deaec37741ed35",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.135.1",
+            "version": "3.135.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "59587a4f3fc88b36ce7f2e1a102bfcd7a816b27c"
+                "reference": "0f6f6e8f4a44193908e18b8c7b8530b02f5bc428"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/59587a4f3fc88b36ce7f2e1a102bfcd7a816b27c",
-                "reference": "59587a4f3fc88b36ce7f2e1a102bfcd7a816b27c",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/0f6f6e8f4a44193908e18b8c7b8530b02f5bc428",
+                "reference": "0f6f6e8f4a44193908e18b8c7b8530b02f5bc428",
                 "shasum": ""
             },
             "require": {
@@ -88,20 +88,20 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-04-21T18:14:29+00:00"
+            "time": "2020-04-23T18:18:24+00:00"
         },
         {
             "name": "bristol-su/control",
-            "version": "v2.0",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bristol-su/control.git",
-                "reference": "0c5c4d7ad8d2dfa16d4c56c0f7df7159e6326a84"
+                "reference": "4981135ec3c49d592cf6ba6fe38896bf748fbd03"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bristol-su/control/zipball/0c5c4d7ad8d2dfa16d4c56c0f7df7159e6326a84",
-                "reference": "0c5c4d7ad8d2dfa16d4c56c0f7df7159e6326a84",
+                "url": "https://api.github.com/repos/bristol-su/control/zipball/4981135ec3c49d592cf6ba6fe38896bf748fbd03",
+                "reference": "4981135ec3c49d592cf6ba6fe38896bf748fbd03",
                 "shasum": ""
             },
             "require": {
@@ -141,20 +141,20 @@
                 }
             ],
             "description": "An implementation of the control contracts",
-            "time": "2020-04-22T13:35:15+00:00"
+            "time": "2020-04-24T16:36:35+00:00"
         },
         {
             "name": "bristol-su/support",
-            "version": "v4.3.3",
+            "version": "v4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bristol-su/support.git",
-                "reference": "81e52c6edecb00dc7c746e62d0b7c5867b18f12e"
+                "reference": "67c8d5705ff52cdf9a942a529f68c09af41b3dd5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bristol-su/support/zipball/81e52c6edecb00dc7c746e62d0b7c5867b18f12e",
-                "reference": "81e52c6edecb00dc7c746e62d0b7c5867b18f12e",
+                "url": "https://api.github.com/repos/bristol-su/support/zipball/67c8d5705ff52cdf9a942a529f68c09af41b3dd5",
+                "reference": "67c8d5705ff52cdf9a942a529f68c09af41b3dd5",
                 "shasum": ""
             },
             "require": {
@@ -213,7 +213,7 @@
                 "portal",
                 "sdk"
             ],
-            "time": "2020-04-22T13:42:45+00:00"
+            "time": "2020-04-23T11:02:35+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -1479,16 +1479,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "1.4.1",
+            "version": "1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "c995966d35424bae20f76f8b31248099487a3f57"
+                "reference": "9e780d972185e4f737a03bade0fd34a9e67bbf31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/c995966d35424bae20f76f8b31248099487a3f57",
-                "reference": "c995966d35424bae20f76f8b31248099487a3f57",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/9e780d972185e4f737a03bade0fd34a9e67bbf31",
+                "reference": "9e780d972185e4f737a03bade0fd34a9e67bbf31",
                 "shasum": ""
             },
             "require": {
@@ -1549,7 +1549,7 @@
                 "md",
                 "parser"
             ],
-            "time": "2020-04-20T13:36:51+00:00"
+            "time": "2020-04-24T13:39:56+00:00"
         },
         {
             "name": "league/event",
@@ -4467,9 +4467,18 @@
         }
     ],
     "packages-dev": [],
-    "aliases": [],
+    "aliases": [
+        {
+            "alias": "2.0",
+            "alias_normalized": "2.0.0.0",
+            "version": "dev-develop",
+            "package": "bristol-su/control"
+        }
+    ],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "bristol-su/control": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

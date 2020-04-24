@@ -83,4 +83,9 @@ class DataUserRepository implements DataUser
         }
         return $users;
     }
+
+    public function update(int $id, ?string $firstName = null, ?string $lastName = null, ?string $email = null, ?\DateTime $dob = null, ?string $preferredName = null): \BristolSU\ControlDB\Contracts\Models\DataUser
+    {
+        return $this->getById($id);
+    }
 }
