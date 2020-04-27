@@ -2,18 +2,17 @@
 
 namespace BristolSU\UnionCloud\Commands;
 
+use BristolSU\ControlDB\Cache\DataUser;
 use BristolSU\ControlDB\Contracts\Models\User;
 use BristolSU\ControlDB\Contracts\Repositories\User as UserRepository;
 use BristolSU\UnionCloud\Cache\IdStore;
+use BristolSU\UnionCloud\Implementations\DataUserRepository;
 use BristolSU\UnionCloud\UnionCloud\UnionCloud;
-use BristolSU\UnionCloud\UnionCloud\UnionCloudCacher;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use Twigger\UnionCloud\API\Auth\awsAuthenticator;
 
 class CacheUnionCloudDataUsers extends Command
 {
@@ -36,7 +35,7 @@ class CacheUnionCloudDataUsers extends Command
      */
     private $idStore;
     /**
-     * @var UnionCloudCacher
+     * @var UnionCloud
      */
     private $repository;
 
@@ -49,10 +48,7 @@ class CacheUnionCloudDataUsers extends Command
     {
         parent::__construct();
         $this->idStore = $idStore;
-        $this->repository = new UnionCloudCacher(
-            new UnionCloud(app(\Twigger\UnionCloud\API\UnionCloud::class)),
-            app(Repository::class)
-        );
+        $this->repository = app(DataUserRepository::class);
     }
  
     /**
@@ -68,7 +64,7 @@ class CacheUnionCloudDataUsers extends Command
                 $id = $this->idStore->pop();
                 $this->line('Caching user #' . $id);
                 $this->updateCache($id, function($id) {
-                    return $this->repository->getUserById($id);
+                    return $this->repository->getById($id);
                 });
                 $completed += 1;
             } catch (\Exception $e) {
@@ -95,27 +91,28 @@ class CacheUnionCloudDataUsers extends Command
     private function refreshIdStore()
     {
         $ids = app(UserRepository::class)->all()->map(function(User $user) {
-            return $user->dataProviderId();
+            return $user->id();
         });
         $this->idStore->setIds($ids);
     }
 
     private function updateCache($id, \Closure $callback)
     {
-        $key = 'unioncloud-data-user-get-by-id:' . $id;
+        $key = DataUser::class . '@getByID:' . $id;
         $hasCache = Cache::has($key);
         if($hasCache) {
             $value = Cache::get($key);
             Cache::forget($key);
         }
         try {
-            $callback($id);
+            $newValue = $callback($id);
         } catch (\Exception $e) {
             if($hasCache) {
                 Cache::forever($key, $value);
             }
             throw $e;
         }
+        Cache::forever($key, $newValue);
     }
 
 }

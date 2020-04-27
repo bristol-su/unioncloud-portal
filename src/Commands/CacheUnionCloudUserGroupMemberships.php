@@ -3,8 +3,10 @@
 namespace BristolSU\UnionCloud\Commands;
 
 use BristolSU\ControlDB\Contracts\Models\User;
+use BristolSU\ControlDB\Contracts\Repositories\Group;
 use BristolSU\ControlDB\Contracts\Repositories\User as UserRepository;
 use BristolSU\UnionCloud\Cache\IdStore;
+use BristolSU\UnionCloud\Implementations\UserGroup;
 use BristolSU\UnionCloud\Models\GroupGroupMembership;
 use BristolSU\UnionCloud\UnionCloud\UnionCloud;
 use BristolSU\UnionCloud\UnionCloud\UnionCloudCacher;
@@ -36,7 +38,7 @@ class CacheUnionCloudUserGroupMemberships extends Command
      */
     private $idStore;
     /**
-     * @var UnionCloudCacher
+     * @var UserGroup
      */
     private $repository;
 
@@ -49,10 +51,7 @@ class CacheUnionCloudUserGroupMemberships extends Command
     {
         parent::__construct();
         $this->idStore = $idStore;
-        $this->repository = new UnionCloudCacher(
-            new UnionCloud(app(\Twigger\UnionCloud\API\UnionCloud::class)),
-            app(Repository::class)
-        );
+        $this->repository = app(UserGroup::class);
     }
 
     /**
@@ -68,7 +67,7 @@ class CacheUnionCloudUserGroupMemberships extends Command
                 $id = $this->idStore->pop();
                 $this->line('Caching user group #' . $id);
                 $this->updateCache($id, function($id) {
-                    return $this->repository->getUserGroupMemberships($id);
+                    return $this->repository->getUsersThroughGroup(app(Group::class)->getById($id));
                 });
                 $completed += 1;
             } catch (\Exception $e) {
@@ -94,26 +93,29 @@ class CacheUnionCloudUserGroupMemberships extends Command
 
     private function refreshIdStore()
     {
-        $ids = GroupGroupMembership::all()->pluck('usergroup_id');
+        $ids = app(Group::class)->all()->map(function($group) {
+            return $group->id();
+        });
         $this->idStore->setIds($ids);
     }
 
     private function updateCache($id, \Closure $callback)
     {
-        $key = 'unioncloud-user-group-get-by-id:' . $id;
+        $key = \BristolSU\ControlDB\Cache\Pivots\UserGroup::class .'@getUsersThroughGroup:' . $id;
         $hasCache = Cache::has($key);
         if($hasCache) {
             $value = Cache::get($key);
             Cache::forget($key);
         }
         try {
-            $callback($id);
+            $newValue = $callback($id);
         } catch (\Exception $e) {
             if($hasCache) {
                 Cache::forever($key, $value);
             }
             throw $e;
         }
+        Cache::forever($key, $newValue);
     }
 
 }

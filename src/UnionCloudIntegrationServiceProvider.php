@@ -9,9 +9,6 @@ use BristolSU\UnionCloud\Cache\IdStore;
 use BristolSU\UnionCloud\Commands\CacheUnionCloudDataUsers;
 use BristolSU\UnionCloud\Commands\CacheUnionCloudUserGroupMemberships;
 use BristolSU\UnionCloud\Commands\CacheUnionCloudUsersUserGroupMemberships;
-use BristolSU\UnionCloud\Commands\FindCachedUserGroupMemberships;
-use BristolSU\UnionCloud\Commands\FindCachedUsers;
-use BristolSU\UnionCloud\Commands\FindCachedUserUserGroupMemberships;
 use BristolSU\UnionCloud\Implementations\DataUserRepository as UnionCloudDataUserRepository;
 use BristolSU\UnionCloud\Implementations\UserGroup as UnionCloudUserGroupRepository;
 use BristolSU\UnionCloud\UnionCloud\UnionCloud;
@@ -30,9 +27,6 @@ class UnionCloudIntegrationServiceProvider extends ServiceProvider
         $this->registerCommands();
         
         $this->app->bind(UnionCloudContract::class, UnionCloud::class);
-//        $this->app->extend(UnionCloudContract::class, function(UnionCloudContract $service, $app) {
-//            return new UnionCloudCacher($service, $app->make(Repository::class));
-//        });
         
         $this->app->when([CacheUnionCloudDataUsers::class, FindCachedUsers::class])
             ->needs(IdStore::class)
@@ -84,9 +78,6 @@ class UnionCloudIntegrationServiceProvider extends ServiceProvider
             CacheUnionCloudDataUsers::class,
             CacheUnionCloudUserGroupMemberships::class,
             CacheUnionCloudUsersUserGroupMemberships::class,
-            FindCachedUsers::class,
-            FindCachedUserGroupMemberships::class,
-            FindCachedUserUserGroupMemberships::class
         ]);
     }
 
