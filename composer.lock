@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3826e681dbfeaa2092deaec37741ed35",
+    "content-hash": "59fcd14eabdc4d5946f23efb5dfbfd03",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.135.3",
+            "version": "3.135.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "0f6f6e8f4a44193908e18b8c7b8530b02f5bc428"
+                "reference": "fb6f4a12d9ad1b8fc1481aef61ed1f8a9fe2164b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/0f6f6e8f4a44193908e18b8c7b8530b02f5bc428",
-                "reference": "0f6f6e8f4a44193908e18b8c7b8530b02f5bc428",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/fb6f4a12d9ad1b8fc1481aef61ed1f8a9fe2164b",
+                "reference": "fb6f4a12d9ad1b8fc1481aef61ed1f8a9fe2164b",
                 "shasum": ""
             },
             "require": {
@@ -88,20 +88,20 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-04-23T18:18:24+00:00"
+            "time": "2020-04-24T18:14:04+00:00"
         },
         {
             "name": "bristol-su/control",
-            "version": "dev-develop",
+            "version": "v2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bristol-su/control.git",
-                "reference": "4981135ec3c49d592cf6ba6fe38896bf748fbd03"
+                "reference": "5cc6ab65453cb42ed35b25d50b3f362ebbf758d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bristol-su/control/zipball/4981135ec3c49d592cf6ba6fe38896bf748fbd03",
-                "reference": "4981135ec3c49d592cf6ba6fe38896bf748fbd03",
+                "url": "https://api.github.com/repos/bristol-su/control/zipball/5cc6ab65453cb42ed35b25d50b3f362ebbf758d3",
+                "reference": "5cc6ab65453cb42ed35b25d50b3f362ebbf758d3",
                 "shasum": ""
             },
             "require": {
@@ -141,7 +141,7 @@
                 }
             ],
             "description": "An implementation of the control contracts",
-            "time": "2020-04-24T16:36:35+00:00"
+            "time": "2020-04-22T13:35:15+00:00"
         },
         {
             "name": "bristol-su/support",
@@ -4467,18 +4467,9 @@
         }
     ],
     "packages-dev": [],
-    "aliases": [
-        {
-            "alias": "2.0",
-            "alias_normalized": "2.0.0.0",
-            "version": "dev-develop",
-            "package": "bristol-su/control"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "bristol-su/control": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

@@ -12,8 +12,7 @@
     "require": {
         "php": "^7.3",
         "bristol-su/support": "^4.2",
-        "twigger/unioncloud": "^1.0",
-        "bristol-su/control": "dev-develop as 2.0"
+        "twigger/unioncloud": "^1.0"
     },
     "extra": {
         "laravel": {
