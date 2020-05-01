@@ -90,46 +90,6 @@ class DataUserModel implements DataUser
     /**
      * @inheritDoc
      */
-    public function setFirstName(?string $firstName): void
-    {
-        throw new \Exception('Cannot edit a UnionCloud Data User');
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setLastName(?string $lastName): void
-    {
-        throw new \Exception('Cannot edit a UnionCloud Data User');
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setEmail(?string $email): void
-    {
-        throw new \Exception('Cannot edit a UnionCloud Data User');
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setDob(?DateTime $dob): void
-    {
-        throw new \Exception('Cannot edit a UnionCloud Data User');
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setPreferredName(?string $name): void
-    {
-        throw new \Exception('Cannot edit a UnionCloud Data User');
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function toJson($options = 0)
     {
         return json_encode($this->toArray(), $options);
