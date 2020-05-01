@@ -4,6 +4,7 @@ namespace BristolSU\UnionCloud\Implementations;
 
 use BristolSU\ControlDB\Contracts\Models\Group;
 use BristolSU\ControlDB\Contracts\Models\User;
+use BristolSU\UnionCloud\Exception\PermissionDeniedException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Twigger\UnionCloud\API\Resource\UserGroupMembership;
@@ -72,7 +73,7 @@ class UserGroup implements \BristolSU\ControlDB\Contracts\Repositories\Pivots\Us
      */
     public function addUserToGroup(User $user, Group $group): void
     {
-        throw new \Exception('Cannot add user to unioncloud group');
+        throw new PermissionDeniedException('Unioncloud does not allow adding memberships');
     }
 
     /**
@@ -80,6 +81,6 @@ class UserGroup implements \BristolSU\ControlDB\Contracts\Repositories\Pivots\Us
      */
     public function removeUserFromGroup(User $user, Group $group): void
     {
-        throw new \Exception('Cannot remove user to unioncloud group');
+        throw new PermissionDeniedException('Unioncloud does not allow removing memberships');
     }
 }
