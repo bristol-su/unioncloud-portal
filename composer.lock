@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.139.1",
+            "version": "3.140.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "31fc7fc73d550e237b34f7c6802250fd4ade9a01"
+                "reference": "52645498aea4dd2d090884322121270daf3e0f06"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/31fc7fc73d550e237b34f7c6802250fd4ade9a01",
-                "reference": "31fc7fc73d550e237b34f7c6802250fd4ade9a01",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/52645498aea4dd2d090884322121270daf3e0f06",
+                "reference": "52645498aea4dd2d090884322121270daf3e0f06",
                 "shasum": ""
             },
             "require": {
@@ -88,7 +88,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-06-02T18:12:38+00:00"
+            "time": "2020-06-04T18:19:47+00:00"
         },
         {
             "name": "bristol-su/control",
@@ -4850,16 +4850,16 @@
         },
         {
             "name": "twigger/unioncloud",
-            "version": "v1.0.6",
+            "version": "v1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bristol-su/nus-unioncloud-api-wrapper.git",
-                "reference": "0afe8f73b477435876c899ffdefefb2ca139e1a8"
+                "reference": "8121f5f80320a3523ce33eeaaff900aed5cecebe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bristol-su/nus-unioncloud-api-wrapper/zipball/0afe8f73b477435876c899ffdefefb2ca139e1a8",
-                "reference": "0afe8f73b477435876c899ffdefefb2ca139e1a8",
+                "url": "https://api.github.com/repos/bristol-su/nus-unioncloud-api-wrapper/zipball/8121f5f80320a3523ce33eeaaff900aed5cecebe",
+                "reference": "8121f5f80320a3523ce33eeaaff900aed5cecebe",
                 "shasum": ""
             },
             "require": {
@@ -4896,7 +4896,7 @@
                 }
             ],
             "description": "An API Wrapper for the NUS UnionCloud platform",
-            "time": "2020-05-04T12:23:42+00:00"
+            "time": "2020-05-29T12:15:42+00:00"
         },
         {
             "name": "venturecraft/revisionable",
