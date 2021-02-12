@@ -9,6 +9,7 @@ use BristolSU\UnionCloud\Cache\IdStore;
 use BristolSU\UnionCloud\Commands\CacheUnionCloudDataUsers;
 use BristolSU\UnionCloud\Commands\CacheUnionCloudUserGroupMemberships;
 use BristolSU\UnionCloud\Commands\CacheUnionCloudUsersUserGroupMemberships;
+use BristolSU\UnionCloud\Commands\SyncUnionCloudDataUsers;
 use BristolSU\UnionCloud\Implementations\DataUserRepository as UnionCloudDataUserRepository;
 use BristolSU\UnionCloud\Implementations\UserGroup as UnionCloudUserGroupRepository;
 use BristolSU\UnionCloud\UnionCloud\UnionCloud;
@@ -78,6 +79,7 @@ class UnionCloudIntegrationServiceProvider extends ServiceProvider
             CacheUnionCloudDataUsers::class,
             CacheUnionCloudUserGroupMemberships::class,
             CacheUnionCloudUsersUserGroupMemberships::class,
+            SyncUnionCloudDataUsers::class
         ]);
     }
 
