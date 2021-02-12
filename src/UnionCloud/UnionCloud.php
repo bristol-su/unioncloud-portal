@@ -97,4 +97,21 @@ class UnionCloud implements UnionCloudContract
             $this->handleException($e);
         }
     }
+
+    public function getAllUsers(array $attributes, int $page = 1)
+    {
+        try {
+            return $this->unionCloud
+                        ->users()
+                        ->setMode('standard')
+                        ->setPage($page)
+                        ->paginate()
+                        ->all($attributes)
+                        ->getResponse();
+
+        } catch (Exception $e) {
+            $this->handleException($e);
+        }
+    }
+
 }
