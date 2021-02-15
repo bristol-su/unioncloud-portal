@@ -2,6 +2,8 @@
 
 namespace BristolSU\UnionCloud\Jobs;
 
+use BristolSU\Support\User\User;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -18,6 +20,8 @@ class getUsersData implements ShouldQueue
     protected int $delayBy;
     protected $repository;
 
+    protected int $requestLimit = 1;
+
     /**
      * Create a new job instance.
      *
@@ -31,6 +35,8 @@ class getUsersData implements ShouldQueue
         $this->pageCount = $pageCount;
         $this->delayBy = $delayBy;
 
+        $this->requestLimit = config('unioncloud-portal.users_per_minute');
+
         // Init Repository
         $this->repository = app(UnionCloud::class);
     }
@@ -43,23 +49,33 @@ class getUsersData implements ShouldQueue
     public function handle()
     {
         $attributes = [
+            'records_per_page' => $this->requestLimit,
             'page' => $this->page
         ];
 
-        $Users = $this->repository->getAllUsers($attributes, $this->page)->getRawData();
+        try {
+            $Users = $this->repository->getAllUsers($attributes, $this->page)->getRawData();
+        } catch (\Exception $e) {
+            if($e instanceof ClientException && $e->getCode() === 403) {
+                $this->error('Failed to reach UC');
+                return;
+            } else {
+                throw $e;
+            }
+        }
+
         foreach($Users as $User)
         {
             processUserData::dispatch($User);
         }
+
+        $this->triggerNext();
     }
 
     protected function triggerNext()
     {
-        if(! $this->page === $this->pageCount) {
-            getUsersData::dispatch($this->page + 1, $this->pageCount, $this->delayBy);
-        } else {
-            // Trigger Notification:
-
+        if($this->pageCount > $this->page) {
+            getUsersData::dispatch($this->page + 1, $this->pageCount, $this->delayBy)->delay(now()->addSeconds($this->delayBy));
         }
     }
 }
