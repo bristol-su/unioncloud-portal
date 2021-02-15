@@ -75,23 +75,9 @@ class SyncUnionCloudDataUsers extends Command
         $factor = ceil(60/($this->requestRate * 0.8));
 
         // Offset Page by 1 as this request will return the 1st Page:
-        if(! $this->page === $this->pageCount) {
-            getUsersData::dispatch($this->page + 1, $this->pageCount, $factor);
+        if($this->pageCount > $this->page) {
+            getUsersData::dispatch($this->page + 1, $this->pageCount, $factor)->delay(now()->addSeconds($factor));
         }
-
-
-//        for($this->page += 1; $this->page <= $this->pageCount; $this->page++)
-//        {
-//            if($this->page === $this->pageCount)
-//            {
-//                // Append Final Flag:
-//                getUsersData::dispatch($this->page, true)->delay(now()->addSeconds($this->page*$factor));
-//            } else {
-//                getUsersData::dispatch($this->page)->delay(now()->addSeconds($this->page*$factor));
-//            }
-//        }
-
-        // Once PageLimit can be set use: $Users->getRawMeta()['Total'] to generate number of pages
 
         // Get Users from UC API as Array:
         $Users = $response->getRawData();
