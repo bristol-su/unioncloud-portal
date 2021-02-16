@@ -11,7 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use BristolSU\UnionCloud\UnionCloud\UnionCloud;
 
-class getUsersData implements ShouldQueue
+class GetUsersData implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
