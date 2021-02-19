@@ -87,14 +87,7 @@ class SyncUnionCloudDataUsers extends Command
 
         // Get Users from UC API as Array:
         $Users = $response->getRawData();
-        foreach($Users as $User)
-        {
-            processUserData::dispatch($User);
-        }
 
-        // Offset Page by 1 as this request will return the 1st Page:
-        if($this->pageCount > $this->page) {
-            getUsersData::dispatch($this->page + 1, $this->pageCount, $factor)->delay(now()->addSeconds($factor));
-        }
+        getUsersData::dispatch($this->page, $this->pageCount, $factor, $Users);
     }
 }

@@ -18,6 +18,7 @@ class GetUsersData implements ShouldQueue
     protected int $page;
     protected int $pageCount;
     protected int $delayBy;
+    protected array $users;
     protected $repository;
 
     protected int $requestLimit = 1;
@@ -28,12 +29,14 @@ class GetUsersData implements ShouldQueue
      * @param int $page
      * @param int $pageCount
      * @param int $delayBy
+     * @param array $users
      */
-    public function __construct(int $page, int $pageCount, int $delayBy)
+    public function __construct(int $page, int $pageCount, int $delayBy, array $users = [])
     {
         $this->page = $page;
         $this->pageCount = $pageCount;
         $this->delayBy = $delayBy;
+        $this->users = $users;
 
         $this->requestLimit = config('unioncloud-portal.users_per_minute');
 
@@ -53,21 +56,26 @@ class GetUsersData implements ShouldQueue
             'page' => $this->page
         ];
 
-        try {
-            $Users = $this->repository->getAllUsers($attributes, $this->page)->getRawData();
-        } catch (\Exception $e) {
-            if($e instanceof ClientException && $e->getCode() === 403) {
-                $this->error('Failed to reach UC');
-                return;
-            } else {
-                throw $e;
+        // If No Users are passed through then process get request:
+        if(! $this->users) {
+            try {
+                $this->users = $this->repository->getAllUsers($attributes, $this->page)->getRawData();
+            } catch (\Exception $e) {
+                if ($e instanceof ClientException && $e->getCode() === 403) {
+                    $this->error('Failed to reach UC');
+                    return;
+                } else {
+
+                    throw $e;
+                }
             }
         }
 
-        foreach($Users as $User)
+        foreach($this->users as $User)
         {
             processUserData::dispatch($User);
         }
+
 
         $this->triggerNext();
     }
