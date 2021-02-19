@@ -74,7 +74,7 @@ class GetUsersData implements ShouldQueue
 
         foreach($this->users as $User)
         {
-            processUserData::dispatch($User);
+            ProcessUserData::dispatch($User);
         }
 
 
