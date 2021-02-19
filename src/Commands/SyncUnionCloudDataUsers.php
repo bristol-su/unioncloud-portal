@@ -76,6 +76,7 @@ class SyncUnionCloudDataUsers extends Command
                 $this->error('Failed to reach UC');
                 return;
             } else {
+                Log::error($e, $e->getCode(), 'Exception thrown from SyncUnionCloudDataUsers');
                 throw $e;
             }
         }

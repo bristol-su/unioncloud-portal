@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use BristolSU\UnionCloud\UnionCloud\UnionCloud;
+use Illuminate\Support\Facades\Log;
 
 class GetUsersData implements ShouldQueue
 {
@@ -65,7 +66,7 @@ class GetUsersData implements ShouldQueue
                     $this->error('Failed to reach UC');
                     return;
                 } else {
-
+                    Log::error($e, $e->getCode(), 'Exception thrown from getUsersData process');
                     throw $e;
                 }
             }
