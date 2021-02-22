@@ -3,6 +3,7 @@
 namespace BristolSU\UnionCloud\Jobs;
 
 use BristolSU\Support\User\User;
+use BristolSU\UnionCloud\UnionCloud\UnionCloudContract;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,12 +18,12 @@ class GetUsersData implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected int $page;
-    protected int $pageCount;
-    protected int $delayBy;
-    protected array $users;
-    protected $repository;
 
-    protected int $requestLimit = 1;
+    protected int $pageCount;
+
+    protected int $delayBy;
+
+    protected array $users;
 
     /**
      * Create a new job instance.
@@ -38,36 +39,31 @@ class GetUsersData implements ShouldQueue
         $this->pageCount = $pageCount;
         $this->delayBy = $delayBy;
         $this->users = $users;
-
-        $this->requestLimit = config('unioncloud-portal.users_per_minute');
-
-        // Init Repository
-        $this->repository = app(UnionCloud::class);
     }
 
     /**
      * Execute the job.
      *
+     * @param UnionCloudContract $unionCloud
      * @return void
+     * @throws \Exception
      */
-    public function handle()
+    public function handle(UnionCloudContract $unionCloud)
     {
         $attributes = [
-            'records_per_page' => $this->requestLimit,
+            'records_per_page' => config('unioncloud-portal.users_per_minute'),
             'page' => $this->page
         ];
 
         // If No Users are passed through then process get request:
         if(! $this->users) {
             try {
-                $this->users = $this->repository->getAllUsers($attributes, $this->page)->getRawData();
+                $this->users = $unionCloud->getAllUsers($attributes, $this->page)->getRawData();
             } catch (\Exception $e) {
                 if ($e instanceof ClientException && $e->getCode() === 403) {
-                    $this->error('Failed to reach UC');
-                    return;
+                    throw new \Exception('Could not connect to UnionCloud', $e->getCode(), $e);
                 } else {
-                    Log::error($e, $e->getCode(), 'Exception thrown from getUsersData process');
-                    throw $e;
+                    throw new \Exception('An error occured while retrieving user data from UnionCloud', $e->getCode(), $e);
                 }
             }
         }

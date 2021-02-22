@@ -27,19 +27,11 @@ class SyncUnionCloudDataUsers extends Command
      */
     protected $description = 'Sync users from UnionCloud';
 
-    // Not currently working as Page Limit doesn't work on the Package.
-    protected int $requestLimit = 1;
-
     // Number of times to be run per minute
     protected int $requestRate = 10;
 
     protected int $page = 1;
     protected int $pageCount;
-
-    /**
-     * @var UnionCloud
-     */
-    private $repository;
 
     /**
      * Create a new command instance.
@@ -49,35 +41,29 @@ class SyncUnionCloudDataUsers extends Command
     public function __construct()
     {
         parent::__construct();
-        // Update Request Limit if set in .env
-        $this->requestLimit = config('unioncloud-portal.users_per_minute');
-
         // Update Request Rate if set in .env
         $this->requestRate = config('unioncloud-portal.user_requests_rate');
-
-        // Init Repository
-        $this->repository = app(UnionCloud::class);
     }
- 
+
     /**
      * Execute the console command.
+     * @param UnionCloud $unionCloud
+     * @throws \Exception
      */
-    public function handle()
+    public function handle(UnionCloud $unionCloud)
     {
         $attributes = [
-            'records_per_page' => $this->requestLimit,
+            'records_per_page' => 500,
             'page' => $this->page
         ];
 
         try {
-            $response = $this->repository->getAllUsers($attributes, $this->page);
+            $users = $unionCloud->getAllUsers($attributes, $this->page)->getRawData();
         } catch (\Exception $e) {
-            if($e instanceof ClientException && $e->getCode() === 403) {
-                $this->error('Failed to reach UC');
-                return;
+            if ($e instanceof ClientException && $e->getCode() === 403) {
+                throw new \Exception('Could not connect to UnionCloud', $e->getCode(), $e);
             } else {
-                Log::error($e, $e->getCode(), 'Exception thrown from SyncUnionCloudDataUsers');
-                throw $e;
+                throw new \Exception('An error occured while retrieving user data from UnionCloud', $e->getCode(), $e);
             }
         }
 

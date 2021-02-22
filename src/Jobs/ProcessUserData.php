@@ -2,46 +2,46 @@
 
 namespace BristolSU\UnionCloud\Jobs;
 
+use BristolSU\ControlDB\Contracts\Repositories\User as UserRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use BristolSU\Support\User\User;
-use Illuminate\Support\Facades\Log;
+use Twigger\UnionCloud\API\Resource\User;
 
 class ProcessUserData implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected array $user;
     protected $repository;
+
+    private User $unioncloudUser;
 
     /**
      * Create a new job instance.
      *
-     * @param array $user
+     * @param User $unioncloudUser
      */
-    public function __construct($user)
+    public function __construct(User $unioncloudUser)
     {
-        $this->user = $user;
+        $this->unioncloudUser = $unioncloudUser;
     }
 
     /**
      * Execute the job.
      *
+     * @param UserRepository $repository
      * @return void
      */
-    public function handle()
+    public function handle(UserRepository $repository)
     {
-        $this->repository = app(\BristolSU\ControlDB\Contracts\Repositories\User::class);
-
         try {
-            $User = $this->repository->getByDataProviderId($this->user['uid']);
-            $this->repository->update($User->id(), $this->user['uid']);
+            $user = $repository->getByDataProviderId($this->user['uid']);
+            $repository->update($user->id(), $this->user['uid']);
         } catch (ModelNotFoundException $e) {
-            $this->repository->create($this->user['uid']);
+            $repository->create($this->user['uid']);
         }
     }
 }

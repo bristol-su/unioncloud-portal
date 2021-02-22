@@ -11,17 +11,17 @@ interface UnionCloudContract
 
     /**
      * Get all user group memberships from a user group
-     * 
+     *
      * @param int $userGroupId
      * @return Collection|UserGroupMembership[]
-     * 
+     *
      * @throw ModelNotFoundException
      */
     public function getUserGroupMemberships(int $userGroupId): Collection;
 
     /**
      * Get all user group memberships for a given user
-     * 
+     *
      * @param int $userId
      * @return Collection|UserGroupMembership[]
      */
@@ -32,4 +32,6 @@ interface UnionCloudContract
     public function searchForUser(array $attributes);
 
     public function searchForUsers(array $attributes);
+
+    public function getAllUsers(array $attributes, int $page = 1): Collection;
 }
