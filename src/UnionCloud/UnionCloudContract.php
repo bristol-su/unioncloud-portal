@@ -5,6 +5,7 @@ namespace BristolSU\UnionCloud\UnionCloud;
 use Illuminate\Support\Collection;
 use Twigger\UnionCloud\API\Resource\User;
 use Twigger\UnionCloud\API\Resource\UserGroupMembership;
+use Twigger\UnionCloud\API\Response\UserResponse;
 
 interface UnionCloudContract
 {
@@ -33,5 +34,5 @@ interface UnionCloudContract
 
     public function searchForUsers(array $attributes);
 
-    public function getAllUsers(array $attributes, int $page = 1): Collection;
+    public function getAllUsers(int $page, int $perPage): UserResponse;
 }

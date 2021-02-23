@@ -2,17 +2,12 @@
 
 namespace BristolSU\UnionCloud\Commands;
 
-use BristolSU\ControlDB\Contracts\Models\User;
 use BristolSU\ControlDB\Contracts\Repositories\Group;
-use BristolSU\ControlDB\Contracts\Repositories\User as UserRepository;
 use BristolSU\UnionCloud\Cache\IdStore;
+use BristolSU\UnionCloud\Events\UsersWithMembershipToGroupRetrieved;
 use BristolSU\UnionCloud\Implementations\UserGroup;
-use BristolSU\UnionCloud\Models\GroupGroupMembership;
-use BristolSU\UnionCloud\UnionCloud\UnionCloud;
-use BristolSU\UnionCloud\UnionCloud\UnionCloudCacher;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -31,21 +26,21 @@ class CacheUnionCloudUserGroupMemberships extends Command
      *
      * @var string
      */
-    protected $description = 'Cache group memberships from UnionCloud';
+    protected $description = 'Work through queue of memberships to cache.';
 
     /**
      * @var IdStore
      */
-    private $idStore;
+    private IdStore $idStore;
     /**
      * @var UserGroup
      */
-    private $repository;
+    private UserGroup $repository;
 
     /**
      * Create a new command instance.
      *
-     * @return void
+     * @param IdStore $idStore
      */
     public function __construct(IdStore $idStore)
     {
@@ -59,24 +54,33 @@ class CacheUnionCloudUserGroupMemberships extends Command
      */
     public function handle()
     {
+        $this->prepareIdStore();
+
         $completed = 0;
         $failed = false;
 
-        while($this->idStore->count() > 0 && $completed <= config('unioncloud-portal.user_groups_per_minute') && !$failed) {
+        while(
+            $this->idStore->count() > 0 &&
+            $completed < config('unioncloud-portal.user_groups_per_minute') &&
+            !$failed) {
+
+            $controlGroupId = $this->idStore->pop();
+            $this->line('Caching memberships for group #' . $controlGroupId);
+
             try {
-                $id = $this->idStore->pop();
-                $this->line('Caching user group #' . $id);
-                $this->updateCache($id, function($id) {
-                    return $this->repository->getUsersThroughGroup(app(Group::class)->getById($id));
-                });
+                $controlGroup = app(Group::class)->getById($controlGroupId);
+                $users = $this->repository->getUsersThroughGroup($controlGroup);
+
+                UsersWithMembershipToGroupRetrieved::dispatch($controlGroup, $users->toArray());
+
                 $completed += 1;
             } catch (\Exception $e) {
-                $this->error('Failed caching user group #' . $id);
+                $this->error('Failed caching memberships for group #' . $controlGroupId);
                 if($e instanceof ClientException && $e->getCode() === 429) {
-                    $this->idStore->push($id);
+                    $this->idStore->push($controlGroupId);
                     $failed = true;
                 } elseif($e instanceof ModelNotFoundException) {
-                    Log::info(sprintf('Unioncloud usergroup %s not found', $id));
+                    Log::info(sprintf('Members for control group %s not found', $controlGroupId));
                 } else {
                     throw $e;
                 }
@@ -85,37 +89,17 @@ class CacheUnionCloudUserGroupMemberships extends Command
 
         $this->info(sprintf('Cached %d users and %s', $completed, ($failed?'failed':'succeeded')));
 
+    }
+
+    private function prepareIdStore()
+    {
         if($this->idStore->count() === 0) {
-            $this->info('Refreshing cache store');
-            $this->refreshIdStore();
+            $this->line('Refreshing group queue');
+            $controlGroupIds = app(Group::class)->all()->map(function($group) {
+                return $group->id();
+            });
+            $this->idStore->setIds($controlGroupIds);
         }
-    }
-
-    private function refreshIdStore()
-    {
-        $ids = app(Group::class)->all()->map(function($group) {
-            return $group->id();
-        });
-        $this->idStore->setIds($ids);
-    }
-
-    private function updateCache($id, \Closure $callback)
-    {
-        $key = \BristolSU\ControlDB\Cache\Pivots\UserGroup::class .'@getUsersThroughGroup:' . $id;
-        $hasCache = Cache::has($key);
-        if($hasCache) {
-            $value = Cache::get($key);
-            Cache::forget($key);
-        }
-        try {
-            $newValue = $callback($id);
-        } catch (\Exception $e) {
-            if($hasCache) {
-                Cache::forever($key, $value);
-            }
-            throw $e;
-        }
-        Cache::forever($key, $newValue);
     }
 
 }
