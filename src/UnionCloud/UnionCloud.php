@@ -6,9 +6,12 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
+use Twigger\UnionCloud\API\Exception\BaseUnionCloudException;
 use Twigger\UnionCloud\API\Exception\Request\IncorrectRequestParameterException;
 use Twigger\UnionCloud\API\Exception\Resource\ResourceNotFoundException;
+use Twigger\UnionCloud\API\Request\BaseRequest;
 use Twigger\UnionCloud\API\Resource\User;
+use Twigger\UnionCloud\API\Response\UserResponse;
 
 class UnionCloud implements UnionCloudContract
 {
@@ -97,4 +100,24 @@ class UnionCloud implements UnionCloudContract
             $this->handleException($e);
         }
     }
+
+    public function getAllUsers(int $page, int $perPage): UserResponse
+    {
+        try {
+            return $this->unionCloud
+                        ->users()
+                        ->setMode('standard')
+                        ->setPage($page)
+                        ->paginate()
+                        ->all([
+                            'records_per_page' => $perPage,
+                            'page' => $page
+                        ])
+                        ->getResponse();
+
+        } catch (Exception $e) {
+            $this->handleException($e);
+        }
+    }
+
 }
