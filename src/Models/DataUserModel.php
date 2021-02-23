@@ -13,12 +13,15 @@ class DataUserModel implements DataUser
 {
     use DataUserTrait;
 
-    /**
-     * @var User
-     */
-    public $user;
+    private int $id;
 
-    private $properties = [];
+    private ?string $firstName = null;
+
+    private ?string $lastName = null;
+
+    private ?string $email = null;
+
+    private ?DateTime $dob = null;
 
     /**
      * @inheritDoc
@@ -40,7 +43,7 @@ class DataUserModel implements DataUser
      */
     public function id(): int
     {
-        return $this->user->uid;
+        return $this->id;
     }
 
     /**
@@ -48,7 +51,7 @@ class DataUserModel implements DataUser
      */
     public function firstName(): ?string
     {
-        return $this->user->forename;
+        return $this->firstName;
     }
 
     /**
@@ -56,7 +59,7 @@ class DataUserModel implements DataUser
      */
     public function lastName(): ?string
     {
-        return $this->user->surname;
+        return $this->lastName;
     }
 
     /**
@@ -64,7 +67,7 @@ class DataUserModel implements DataUser
      */
     public function email(): ?string
     {
-        return $this->user->email;
+        return $this->email;
     }
 
     /**
@@ -72,11 +75,7 @@ class DataUserModel implements DataUser
      */
     public function dob(): ?DateTime
     {
-        $date = $this->user->dob;
-        if($date === null || $date instanceof DateTime) {
-            return $date;
-        }
-        return null;
+        return $this->dob;
     }
 
     /**
@@ -84,7 +83,7 @@ class DataUserModel implements DataUser
      */
     public function preferredName(): ?string
     {
-        return $this->firstName() . ' ' . $this->lastName();
+        return sprintf('%s %s', $this->firstName, $this->lastName);
     }
 
     /**
@@ -123,7 +122,10 @@ class DataUserModel implements DataUser
      */
     public function getAdditionalAttribute(string $key)
     {
-        return optional($this->user)->{$key};
+        if(property_exists($this, $key)) {
+            return $this->{$key};
+        }
+        return null;
     }
 
     /**
@@ -131,10 +133,11 @@ class DataUserModel implements DataUser
      *
      * @param string $key Key of the attribute
      * @param mixed $value Value of the attribute
+     * @throws \Exception
      */
     public function setAdditionalAttribute(string $key, $value)
     {
-        throw new \Exception('Cannot edit a UnionCloud Data User');
+        throw new \Exception('Cannot update additional attributes on a unioncloud user');
     }
 
     /**
@@ -142,16 +145,22 @@ class DataUserModel implements DataUser
      *
      * @param string $key Key of the attribute
      * @param mixed $value Value of the attribute
+     * @throws \Exception
      */
     public function saveAdditionalAttribute(string $key, $value)
     {
-        throw new \Exception('Cannot edit a UnionCloud Data User');
+        throw new \Exception('Cannot update additional attributes on a unioncloud user');
     }
 
     public static function fromUnionCloudUser(User $unionCloudUser)
     {
         $user = new static;
-        $user->user = $unionCloudUser;
+        $user->id = $unionCloudUser->uid;
+        $user->firstName = $unionCloudUser->forename;
+        $user->lastName = $unionCloudUser->surname;
+        if($unionCloudUser->dob !== false) { // Handles an issue from the base package where dob is false
+            $user->dob = $unionCloudUser->dob;
+        }
         return $user;
     }
 
