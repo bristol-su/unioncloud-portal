@@ -7,6 +7,7 @@ use BristolSU\ControlDB\Contracts\Models\Group;
 use BristolSU\ControlDB\Contracts\Models\User;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 
 class UsersMembershipsRetrieved
 {
@@ -17,14 +18,14 @@ class UsersMembershipsRetrieved
      */
     public User $user;
 
-    public array $groups;
+    public Collection $groups;
 
     /**
      * Create a new job instance.
      *
      * @param array|Group[] $unionCloudUsers
      */
-    public function __construct(User $user, array $groups)
+    public function __construct(User $user, Collection $groups)
     {
         $this->user = $user;
         $this->groups = $groups;

@@ -71,7 +71,7 @@ class CacheUnionCloudUserGroupMemberships extends Command
                 $controlGroup = app(Group::class)->getById($controlGroupId);
                 $users = $this->repository->getUsersThroughGroup($controlGroup);
 
-                UsersWithMembershipToGroupRetrieved::dispatch($controlGroup, $users->toArray());
+                UsersWithMembershipToGroupRetrieved::dispatch($controlGroup, $users);
 
                 $completed += 1;
             } catch (\Exception $e) {
