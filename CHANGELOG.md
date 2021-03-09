@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- portal-316: Added `unioncloud:members:status` and `unioncloud:usermemberships:status` commands to monitor the progress of the caching.
+
 ### Fixed
 - portal-315: Cache unioncloud user email addresses
 
