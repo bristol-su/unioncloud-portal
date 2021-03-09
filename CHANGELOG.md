@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- portal-315: Cache unioncloud user email addresses
+
 ## [1.0.0] - 2021-02-23
 
 ### Added

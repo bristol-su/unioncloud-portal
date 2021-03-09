@@ -158,6 +158,7 @@ class DataUserModel implements DataUser
         $user->id = $unionCloudUser->uid;
         $user->firstName = $unionCloudUser->forename;
         $user->lastName = $unionCloudUser->surname;
+        $user->email = $unionCloudUser->email;
         if($unionCloudUser->dob !== false) { // Handles an issue from the base package where dob is false
             $user->dob = $unionCloudUser->dob;
         }
