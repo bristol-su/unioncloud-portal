@@ -10,6 +10,9 @@ use BristolSU\UnionCloud\Commands\CacheUnionCloudDataUsers;
 use BristolSU\UnionCloud\Commands\CacheUnionCloudUserGroupMemberships;
 use BristolSU\UnionCloud\Commands\CacheUnionCloudUsersUserGroupMemberships;
 use BristolSU\UnionCloud\Commands\SyncUnionCloudDataUsers;
+use BristolSU\UnionCloud\Commands\UnionCloudDataUserStatus;
+use BristolSU\UnionCloud\Commands\UnionCloudUserGroupMembershipStatus;
+use BristolSU\UnionCloud\Commands\UnionCloudUserUserGroupMembershipStatus;
 use BristolSU\UnionCloud\Events\UserRetrieved;
 use BristolSU\UnionCloud\Events\UsersMembershipsRetrieved;
 use BristolSU\UnionCloud\Events\UsersWithMembershipToGroupRetrieved;
@@ -38,13 +41,19 @@ class UnionCloudIntegrationServiceProvider extends ServiceProvider
 
         $this->app->bind(UnionCloudContract::class, UnionCloud::class);
 
-        $this->app->when(CacheUnionCloudUserGroupMemberships::class)
+        $this->app->when([
+            CacheUnionCloudUserGroupMemberships::class,
+            UnionCloudUserGroupMembershipStatus::class
+        ])
             ->needs(IdStore::class)
             ->give(function() {
                 return new IdCacheStore('uc-ug-ids-to-cache', app(Repository::class));
             });
 
-        $this->app->when(CacheUnionCloudUsersUserGroupMemberships::class)
+        $this->app->when([
+            CacheUnionCloudUsersUserGroupMemberships::class,
+            UnionCloudUserUserGroupMembershipStatus::class
+        ])
             ->needs(IdStore::class)
             ->give(function() {
                 return new IdCacheStore('uc-ug-user-ids-to-cache', app(Repository::class));
@@ -89,7 +98,10 @@ class UnionCloudIntegrationServiceProvider extends ServiceProvider
         $this->commands([
             CacheUnionCloudUserGroupMemberships::class,
             CacheUnionCloudUsersUserGroupMemberships::class,
-            SyncUnionCloudDataUsers::class
+            SyncUnionCloudDataUsers::class,
+            UnionCloudUserGroupMembershipStatus::class,
+            UnionCloudUserUserGroupMembershipStatus::class,
+            UnionCloudDataUserStatus::class
         ]);
     }
 
