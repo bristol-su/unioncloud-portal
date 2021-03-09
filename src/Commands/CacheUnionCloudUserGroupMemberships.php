@@ -9,7 +9,6 @@ use BristolSU\UnionCloud\Implementations\UserGroup;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
@@ -96,7 +95,6 @@ class CacheUnionCloudUserGroupMemberships extends Command
     {
         if($this->idStore->count() === 0) {
             $this->line('Refreshing group queue');
-            /** @var Collection $controlGroupIds */
             $controlGroupIds = app(Group::class)->all()->map(function($group) {
                 return $group->id();
             });
