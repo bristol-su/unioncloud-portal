@@ -27,7 +27,7 @@ class CacheDataUser
     public function handle(UserRetrieved $userRetrieved)
     {
         $this->cache->forever(
-            sprintf('%s@getByID:%s', DataUser::class, $userRetrieved->unionCloudUser->uid),
+            sprintf('%s@getById:%s', DataUser::class, $userRetrieved->unionCloudUser->uid),
             DataUserModel::fromUnionCloudUser($userRetrieved->unionCloudUser)
         );
     }
