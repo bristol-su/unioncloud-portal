@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2021-03-10
+
 ### Fixed
 - portal-323: Corrected the data user cache key
 
@@ -23,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial Release
 
-[Unreleased]: https://github.com/bristol-su/unioncloud-portal/compare/v1.0.1...HEAD 
+[Unreleased]: https://github.com/bristol-su/unioncloud-portal/compare/v1.0.2...HEAD 
+[1.0.2]: https://github.com/bristol-su/unioncloud-portal/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/bristol-su/unioncloud-portal/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/bristol-su/unioncloud-portal/releases/tag/v1.0.0
