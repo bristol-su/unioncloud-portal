@@ -2,7 +2,6 @@
 
 namespace BristolSU\UnionCloud\Jobs;
 
-use BristolSU\Support\User\User;
 use BristolSU\UnionCloud\Commands\SyncUnionCloudDataUsers;
 use BristolSU\UnionCloud\Events\UserRetrieved;
 use BristolSU\UnionCloud\UnionCloud\UnionCloudContract;

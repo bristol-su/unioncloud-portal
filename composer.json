@@ -2,6 +2,8 @@
     "name": "bristol-su/unioncloud-portal",
     "description": "An integration with unioncloud for use with the portal",
     "type": "library",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "license": "GPL-3.0-or-later",
     "authors": [
         {
@@ -10,9 +12,9 @@
         }
     ],
     "require": {
-        "php": "^7.4",
-        "bristol-su/support": "^4.2",
-        "twigger/unioncloud": "^1.0.8"
+        "php": "^8.0",
+        "bristol-su/support": "dev-portal-v4 as 4.2",
+        "twigger/unioncloud": "dev-develop as 1.0.8"
     },
     "extra": {
         "laravel": {
