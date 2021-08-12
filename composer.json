@@ -13,8 +13,8 @@
     ],
     "require": {
         "php": "^8.0",
-        "bristol-su/support": "dev-portal-v4 as 4.2",
-        "twigger/unioncloud": "dev-develop as 1.0.8"
+        "bristol-su/support": "^5.0.0",
+        "twigger/unioncloud": "^1.0.9"
     },
     "extra": {
         "laravel": {
