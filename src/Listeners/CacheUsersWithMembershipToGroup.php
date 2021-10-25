@@ -28,8 +28,6 @@ class CacheUsersWithMembershipToGroup
      */
     public function handle(UsersWithMembershipToGroupRetrieved $event)
     {
-        // Get from the cache the current user.
-        // If the users are different (use strcmp),
         $key = sprintf('%s@getUsersThroughGroup:%s', UserGroup::class, $event->group->id());
         if($this->cache->has($key)) {
             $ids = collect($this->cache->get($key));
