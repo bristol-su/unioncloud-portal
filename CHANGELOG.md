@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Fire events when users are added to or removed from groups
+- Fire a DataUserUpdated event when a data user is updated
 
 ## [2.0.0] - 2021-08-12
 
