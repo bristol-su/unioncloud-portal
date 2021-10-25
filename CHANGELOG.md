@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Fire events when users are added to or removed from groups
+
 ## [2.0.0] - 2021-08-12
 
 ### Added
