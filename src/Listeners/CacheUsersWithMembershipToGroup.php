@@ -45,7 +45,7 @@ class CacheUsersWithMembershipToGroup
         }
         $this->cache->forever(
             $key,
-            collect($event->unionCloudUsers)->map(fn(DataUser $dataUser) => $dataUser->id())->all()
+            collect($event->unionCloudUsers)->map(fn(\BristolSU\ControlDB\Contracts\Models\User $user) => $user->id())->all()
         );
     }
 
