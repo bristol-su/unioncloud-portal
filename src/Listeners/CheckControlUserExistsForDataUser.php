@@ -3,6 +3,7 @@
 namespace BristolSU\UnionCloud\Listeners;
 
 use BristolSU\ControlDB\Contracts\Repositories\User as UserRepository;
+use BristolSU\ControlDB\Events\User\UserCreated;
 use BristolSU\UnionCloud\Events\UserRetrieved;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
