@@ -3,8 +3,8 @@
 namespace BristolSU\UnionCloud\Listeners;
 
 use BristolSU\ControlDB\Cache\Pivots\UserGroup;
+use BristolSU\ControlDB\Contracts\Models\Group;
 use BristolSU\UnionCloud\Events\UsersMembershipsRetrieved;
-use BristolSU\UnionCloud\Events\UsersWithMembershipToGroupRetrieved;
 use Illuminate\Contracts\Cache\Repository;
 
 class CacheUsersMemberships
@@ -27,7 +27,7 @@ class CacheUsersMemberships
     {
         $this->cache->forever(
             sprintf('%s@getGroupsThroughUser:%s', UserGroup::class, $event->user->id()),
-            $event->groups
+            $event->groups->map(fn(Group $group) => $group->id())->all()
         );
     }
 
