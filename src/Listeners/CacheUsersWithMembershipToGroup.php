@@ -3,7 +3,7 @@
 namespace BristolSU\UnionCloud\Listeners;
 
 use BristolSU\ControlDB\Cache\Pivots\UserGroup;
-use BristolSU\ControlDB\Contracts\Models\DataUser;
+use BristolSU\ControlDB\Contracts\Models\User as UserModel;
 use BristolSU\ControlDB\Events\Pivots\UserGroup\UserAddedToGroup;
 use BristolSU\ControlDB\Events\Pivots\UserGroup\UserRemovedFromGroup;
 use BristolSU\ControlDB\Contracts\Repositories\User;
@@ -31,7 +31,7 @@ class CacheUsersWithMembershipToGroup
         $key = sprintf('%s@getUsersThroughGroup:%s', UserGroup::class, $event->group->id());
         if($this->cache->has($key)) {
             $ids = collect($this->cache->get($key));
-            $newIds = collect($event->unionCloudUsers->map(fn(DataUser $dataUser) => $dataUser->id()));
+            $newIds = collect($event->unionCloudUsers->map(fn(UserModel $user) => $user->id()));
             $updatingIds = $newIds->diff($ids);
             $removingIds = $ids->diff($newIds);
             $updatingIds->each(fn(int $id) => event(new UserAddedToGroup(
