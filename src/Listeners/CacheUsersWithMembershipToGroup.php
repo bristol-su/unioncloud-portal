@@ -31,7 +31,7 @@ class CacheUsersWithMembershipToGroup
         $key = sprintf('%s@getUsersThroughGroup:%s', UserGroup::class, $event->group->id());
         if($this->cache->has($key)) {
             $ids = collect($this->cache->get($key));
-            $newIds = collect($event->unionCloudUsers);
+            $newIds = collect($event->unionCloudUsers->map(fn(DataUser $dataUser) => $dataUser->id()));
             $updatingIds = $newIds->diff($ids);
             $removingIds = $ids->diff($newIds);
             $updatingIds->each(fn(int $id) => event(new UserAddedToGroup(
