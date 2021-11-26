@@ -18,8 +18,6 @@ class RetrieveUsers implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $queue = 'unioncloud';
-
     protected int $page;
 
     protected int $totalPages;
@@ -38,6 +36,7 @@ class RetrieveUsers implements ShouldQueue
         $this->page = $page;
         $this->totalPages = $totalPages;
         $this->delayBy = $delayBy;
+        $this->onQueue('unioncloud');
     }
 
     /**
