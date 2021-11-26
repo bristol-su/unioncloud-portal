@@ -18,6 +18,8 @@ class RetrieveUsers implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $queue = 'unioncloud';
+
     protected int $page;
 
     protected int $totalPages;
