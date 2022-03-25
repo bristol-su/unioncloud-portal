@@ -36,7 +36,7 @@ class RetrieveUsers implements ShouldQueue
         $this->page = $page;
         $this->totalPages = $totalPages;
         $this->delayBy = $delayBy;
-        $this->onQueue('unioncloud');
+        $this->onQueue(sprintf('unioncloud_%s', config('app.env')));
     }
 
     /**
