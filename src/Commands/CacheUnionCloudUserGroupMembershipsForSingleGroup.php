@@ -47,7 +47,7 @@ class CacheUnionCloudUserGroupMembershipsForSingleGroup extends Command
      */
     public function handle()
     {
-        $controlGroupId = $this->option('groupid');
+        $controlGroupId = $this->argument('groupid');
         $this->line('Caching memberships for group #' . $controlGroupId);
 
         try {
