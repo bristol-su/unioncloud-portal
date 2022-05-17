@@ -19,7 +19,7 @@ class CacheUnionCloudUserGroupMembershipsForSingleGroup extends Command
      *
      * @var string
      */
-    protected $signature = 'unioncloud:members:cache {groupid}';
+    protected $signature = 'unioncloud:members:cache-group {groupid}';
 
     /**
      * The console command description.
